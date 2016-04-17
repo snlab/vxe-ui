@@ -3,3 +3,6 @@ auto
 
 // nodejs dependencies
 node_modules
+
+// mac
+.DS_Store
