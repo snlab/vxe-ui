@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- jquery -->
+  <script src="js/jquery-1.12.3.min.js"></script>
+
+  <!--bootstrap-->
+  <link rel="stylesheet" href="css/bootstrap.min.css" />
+  <script type="text/javascript" src="js/bootstrap.js"></script>
+
+  <!-- next -->
+  <link rel="stylesheet" href="css/next.css">
+  <script src="js/next.js"></script>
+
+  <!-- demo -->
+  <script src="js/config.js"></script>
+  <script src="js/demo.js"></script>
+  <script src="js/topology.js"></script>
+  <body class="main">
+
+      <div id="demo"></div>
+
+      <script type="text/javascript">
+       // NeXt code
+       // Create new app
+       var app = new nx.ui.Application();
+       app.container( document.getElementById( 'demo' ) );
+
+       // Set topology data
+       getTopology();
+       // Attach topo to app
+       topo.attach(app);
+      </script>
+  </body>
+</head>
+</html>
