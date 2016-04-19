@@ -1,0 +1,10 @@
+#main-block {
+    background-color: silver;
+    border-radius: 5px;
+}
+
+.block {
+    margin: 5px 10px;
+    border: 1px solid #999;
+    border-radius: 5px;
+}

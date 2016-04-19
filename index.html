@@ -13,24 +13,60 @@
   <script src="js/next.js"></script>
 
   <!-- demo -->
+  <link rel="stylesheet" href="css/demo.css" />
   <script src="js/config.js"></script>
   <script src="js/demo.js"></script>
   <script src="js/topology.js"></script>
-  <body class="main">
-
-      <div id="demo"></div>
-
-      <script type="text/javascript">
-       // NeXt code
-       // Create new app
-       var app = new nx.ui.Application();
-       app.container( document.getElementById( 'demo' ) );
-
-       // Set topology data
-       getTopology();
-       // Attach topo to app
-       topo.attach(app);
-      </script>
-  </body>
 </head>
+<body>
+
+  <header class="navbar navbar-fix-top" role="banner">
+    <nav class="navbar navbar-inverse" role="navigation">
+      <a class="navbar-brand" href="#">VXE OpenDaylight Demo</a>
+    </nav>
+  </header><!-- header -->
+
+  <div class="container">
+    <div id="main-block" class="row">
+      <div class="col-md-8 col-lg-8">
+        <div class="block" id="viz"></div>
+      </div><!-- viz -->
+
+      <div class="col-md-4 col-lg-4">
+        <div class="block" id="toolkit">
+          <button class="btn btn-info" id="refresh">Refresh Topology</button>
+        </div>
+      </div><!-- toolkit -->
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+        <p class="text-muted credit">Developed by
+          <a href="https://github.com/emiapwil">Gao, Kai</a>
+          (Tsinghua University),
+          <a href="https://github.com/fno2010">Zhang, Jingxuan Jensen</a>,
+          <a href="https://github.com/TonyWang123">Wang, Xin Tony</a>, and
+          <a href="https://github.com/css9091">Chen, Shenshen</a>
+          (Tongji University) of
+          <a href="https://snlab.github.io">SNLab</a>.</p>
+    </div>
+  </footer>
+
+  <script type="text/javascript">
+   // NeXt code
+   // Create new app
+   var app = new nx.ui.Application();
+   app.container( document.getElementById( 'viz' ) );
+
+   // Set topology data
+   getTopology();
+   // Attach topo to app
+   topo.attach(app);
+
+   $("#refresh").click(function() {
+     getTopology();
+   });
+  </script>
+</body>
 </html>
