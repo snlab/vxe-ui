@@ -83,12 +83,22 @@ function transform(rawTopo, inv) {
     // push switches to out.nodes
     if ( topology.node ) {
         topology.node.forEach( function( n, i ) {
-            var node = {
-                'name': intermediates.names[ n[ "node-id" ] ],
-                'mac': intermediates.macs[ n[ "node-id" ] ],
-                'table': intermediates.tables[ n[ "node-id" ] ],
-                'iconType': 'switch'
-            };
+            var node = {};
+            if ( extractNodeType( n[ "node-id"] ) == "host" ) {
+                intermediates.names[ n[ "node-id" ] ] = extractHostName( n[ "node-id" ] );
+                node = {
+                    'name': intermediates.names[ n[ "node-id" ] ],
+                    'mac': extractNodeNo( n[ "node-id" ] ),
+                    'iconType': 'server'
+                };
+            } else {
+                node = {
+                    'name': intermediates.names[ n[ "node-id" ] ],
+                    'mac': intermediates.macs[ n[ "node-id" ] ],
+                    'table': intermediates.tables[ n[ "node-id" ] ],
+                    'iconType': 'switch'
+                };
+            }
             if ( !seenNode[ node.name ] ) {
                 seenNode[ node.name ] = true;
                 out.nodes.push( node );
@@ -110,8 +120,7 @@ function transform(rawTopo, inv) {
                     'source': intermediates.names[ l.source[ "source-node" ] ],
                     'target': intermediates.names[ l.destination[ "dest-node" ] ],
                     'source-port': extractPort( l.source[ "source-tp" ] ),
-                    'target-port': extractPort( l.destination[ "dest-tp" ] ),
-                    'metric': ""
+                    'target-port': extractPort( l.destination[ "dest-tp" ] )
                 };
                 seenPort[ l.source[ "source-tp" ] ] = true;
                 seenPort[ l.destination[ "dest-tp" ] ] = true;
@@ -124,12 +133,21 @@ function transform(rawTopo, inv) {
     return out;
 }
 
-function extractSwitchNo( switchname ) {
-    return parseInt( switchname.slice( switchname.indexOf( ":" ) + 1 ) );
+function extractHostName( nodeName ) {
+    // Danger, when num(host) > 256
+    return "hostn" + nodeName.slice( nodeName.lastIndexOf( ":" ) + 1 );
 }
 
-function extractPort( tpname ) {
-    return parseInt( tpname.slice( tpname.lastIndexOf( ":" ) + 1 ) );
+function extractNodeType( nodeName ) {
+    return nodeName.slice(0, nodeName.indexOf( ":" ) );
+}
+
+function extractNodeNo( nodeName ) {
+    return nodeName.slice( nodeName.indexOf( ":" ) + 1 );
+}
+
+function extractPort( tpName ) {
+    return parseInt( tpName.slice( tpName.lastIndexOf( ":" ) + 1 ) );
 }
 
 function getFlowTableById( tables, id ) {
@@ -145,8 +163,8 @@ function getFlowTableById( tables, id ) {
                 var flow = {
                     'id': f.id,
                     'priority': f.priority,
-                    'match': f.match,
-                    'action': f.instructions.instruction
+                    'match': extractMatch( f.match ),
+                    'action': extractAction( f.instructions.instruction )
                 };
                 flows.push( flow );
             } );
@@ -154,4 +172,28 @@ function getFlowTableById( tables, id ) {
     }
 
     return flows;
+}
+
+function extractMatch( match ) {
+    var out = [];
+    if ( match[ "ethernet-match" ] ) {
+        var ethmatch = match[ "ethernet-match" ];
+        ethmatch[ "ethernet-type" ] && out.push( "type=0x" + (ethmatch[ "ethernet-type" ].type).toString(16) );
+        ethmatch[ "ethernet-source" ] && out.push( "src=" + ethmatch[ "ethernet-source" ].address );
+        ethmatch[ "ethernet-destination" ] && out.push( "src=" + ethmatch[ "ethernet-destination" ].address );
+    }
+    return out.join( "," );
+}
+
+function extractAction( instructions ) {
+    var out = [];
+    instructions.forEach( function ( inst, i ) {
+        if ( inst[ "apply-actions" ] ) {
+            var actions = inst[ "apply-actions" ].action;
+            actions.forEach( function ( a, i ) {
+                a[ "output-action" ] && out.push( a[ "output-action" ][ "output-node-connector" ] + ":" + a[ "output-action" ][ "max-length" ] );
+            });
+        }
+    });
+    return out.join( "," );
 }
