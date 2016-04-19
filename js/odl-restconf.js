@@ -31,7 +31,9 @@ exports.forward_post = function( req, res ) {
                   function( error, response, data) {
                       if (!error && response.statusCode == 200 ) {
                           res.writeHead( 200, { 'Content-Type': 'application'} );
-                          res.write( data );
+                          if (data != null) {
+                            res.write( data );
+                          }
                           res.end();
                       } else {
                           console.error( "post request failed" );

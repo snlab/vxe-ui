@@ -161,8 +161,6 @@ function getFlowTableById( tables, id ) {
         if ( target_table ) {
             target_table.flow.forEach( function ( f, i ) {
                 var flow = {
-                    'id': f.id,
-                    'priority': f.priority,
                     'match': extractMatch( f.match ),
                     'action': extractAction( f.instructions.instruction )
                 };
@@ -180,9 +178,9 @@ function extractMatch( match ) {
         var ethmatch = match[ "ethernet-match" ];
         ethmatch[ "ethernet-type" ] && out.push( "type=0x" + (ethmatch[ "ethernet-type" ].type).toString(16) );
         ethmatch[ "ethernet-source" ] && out.push( "src=" + ethmatch[ "ethernet-source" ].address );
-        ethmatch[ "ethernet-destination" ] && out.push( "src=" + ethmatch[ "ethernet-destination" ].address );
+        ethmatch[ "ethernet-destination" ] && out.push( "dst=" + ethmatch[ "ethernet-destination" ].address );
     }
-    return out.join( "," );
+    return out.join( ",\n" );
 }
 
 function extractAction( instructions ) {
@@ -191,7 +189,7 @@ function extractAction( instructions ) {
         if ( inst[ "apply-actions" ] ) {
             var actions = inst[ "apply-actions" ].action;
             actions.forEach( function ( a, i ) {
-                a[ "output-action" ] && out.push( a[ "output-action" ][ "output-node-connector" ] + ":" + a[ "output-action" ][ "max-length" ] );
+                a[ "output-action" ] && out.push( a[ "output-action" ][ "output-node-connector" ] );
             });
         }
     });

@@ -26,6 +26,15 @@ nx.define('DemoNodeTooltip', nx.ui.Component, {
                     }]
             },
             {
+                tag: 'p',
+                content: [
+                    {
+                        tag: 'label',
+                        content: 'Flow Table:'
+                    }
+                ]
+            },
+            {
                 tag: "table",
                 props: {
                     class: "col-md-12",
@@ -34,15 +43,10 @@ nx.define('DemoNodeTooltip', nx.ui.Component, {
                 content: [
                     {
                         tag: "thead",
+                        props: {
+                            style: "font-weight: bold",
+                        },
                         content: [
-                            {
-                                tag: "td",
-                                content: "flow-id"
-                            },
-                            {
-                                tag: "td",
-                                content: "priority"
-                            },
                             {
                                 tag: "td",
                                 content: "match"
@@ -60,14 +64,6 @@ nx.define('DemoNodeTooltip', nx.ui.Component, {
                             template: {
                                 tag: "tr",
                                 content: [
-                                    {
-                                        tag: "td",
-                                        content: "{id}"
-                                    },
-                                    {
-                                        tag: "td",
-                                        content: "{priority}"
-                                    },
                                     {
                                         tag: "td",
                                         content: "{match}"
