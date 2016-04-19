@@ -8,13 +8,15 @@ var odl_restconf = require( './js/odl-restconf' );
 var Server = function( port ) {
     app.use( express.static( '.' ) );
     app.use( bodyParser.json() );
+    app.use( bodyParser.urlencoded( { extended: true } ) );
 
     app.get( '/', function( req, res ) {
         res.writeHead( 302, { Location: '/index.html' } );
         res.end();
     });
 
-    app.get( '/restconf/*', odl_restconf.forward );
+    app.get( '/restconf/*', odl_restconf.forward_get );
+    app.post( '/restconf/*', odl_restconf.forward_post );
 
     port = port || 3000;
     app.listen( port );

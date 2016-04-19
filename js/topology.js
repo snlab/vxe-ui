@@ -1,10 +1,24 @@
 var topoData;
 
+function createTask(srcMac, dstMac) {
+    $.ajax({
+        url: "/restconf/operations/vxe-opendaylight-demo:setup-path/",
+        type: 'POST',
+        data: {
+            source: srcMac,
+            destination: dstMac
+        },
+        success: function (data) {
+            // TODO
+        }
+    });
+}
+
 function getInventory(rawTopo) {
     $.ajax({
         url: "/restconf/operational/opendaylight-inventory:nodes/",
         type: 'GET',
-        header: {
+        headers: {
             'Authorization': 'Basic ' + config.oauth_token,
             'Content-Type': 'application/json'
         },

@@ -34,7 +34,32 @@
 
       <div class="col-md-4 col-lg-4">
         <div class="block" id="toolkit">
-          <button class="btn btn-info" id="refresh">Refresh Topology</button>
+          <div id="group1">
+              <h4>Refresh Topology</h4>---> <button class="btn btn-info" id="refresh">REFRESH!</button>
+          </div>
+
+          <hr />
+
+          <div id="group2">
+            <div class="form-group" >
+              <label class="control-label" for="src-mac" >Source MAC:</label>
+              <div class="controls" >
+                <input type="text" class="form-control" id="src-mac" name="src-mac" placeholder="12:34:56:78:00:01">
+              </div>
+            </div><!-- Source MAC -->
+            <div class="form-group" >
+              <label class="control-label" for="src-mac" >Destination MAC:</label>
+              <div class="controls" >
+                <input type="text" class="form-control" id="dst-mac" name="dst-mac" placeholder="12:34:56:78:00:02">
+              </div>
+            </div><!-- Destination MAC -->
+            <div class="form-group pull-right">
+              ---> <button type="button" class="btn btn-primary" id="create-task" name="create-task">Create Task</button>
+            </div><!-- Submit Button -->
+          </div>
+
+          <hr style="clear: both" />
+
         </div>
       </div><!-- toolkit -->
     </div>
@@ -53,6 +78,16 @@
     </div>
   </footer>
 
+  <script type="text/javascript">
+   $(document).ready(function() {
+     // Form handler
+     $("#create-task").click(function (event) {
+       createTask(
+         $("#src-mac").val(),
+         $("#dst-mac").val()
+     )});
+   })
+  </script>
   <script type="text/javascript">
    // NeXt code
    // Create new app
